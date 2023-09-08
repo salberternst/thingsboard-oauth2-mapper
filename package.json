@@ -1,6 +1,6 @@
 {
   "name": "thingsboard-oauth2-mapper",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A thingsboard oauth2 mapper service",
   "main": "index.js",
   "scripts": {

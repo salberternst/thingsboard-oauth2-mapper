@@ -7,6 +7,8 @@ const jwt = require('jsonwebtoken')
 const Namespace = '399bab1d-a577-492f-87d7-185963046df4'
 const app = express()
 
+console.log(typeof uuidv5("atenantName", Namespace))
+
 app.use(express.json())
 
 app.get('/', (req, res) => {
@@ -29,10 +31,10 @@ app.post('/', (req, res) => {
   }
 
   if (decodedToken.realm_access.roles.includes(`${tenantName}-admin`)) {
-    response.tenantName = tenantName
+    // response.tenantName = tenantName
     response.tenantId = uuidv5(tenantName, Namespace)
   } else if (decodedToken.realm_access.roles.includes(`${tenantName}-user`)) {
-    response.customerName = 'user'
+    // response.customerName = 'user'
     response.customerId = uuidv5(tenantName, Namespace)
   } else {
     return res.status(403).send('Missing Role')
