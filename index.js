@@ -33,12 +33,14 @@ app.post('/', (req, res) => {
   if (decodedToken.realm_access.roles.includes(`${tenantName}-admin`)) {
     // response.tenantName = tenantName
     response.tenantId = { 
-      id: uuidv5(tenantName, Namespace)
+      id: uuidv5(tenantName, Namespace),
+      entityType: "TENANT"
     }
   } else if (decodedToken.realm_access.roles.includes(`${tenantName}-user`)) {
     // response.customerName = 'user'
     response.customerId = { 
-      id: uuidv5(tenantName, Namespace)
+      id: uuidv5(tenantName, Namespace),
+      entityType: "TENANT"
     }
   } else {
     return res.status(403).send('Missing Role')
