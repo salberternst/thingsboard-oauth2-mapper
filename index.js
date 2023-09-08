@@ -21,15 +21,16 @@ app.post('/', (req, res) => {
 
   const decodedToken = jwt.decode(token)
   const response = {
-    email: `${tenantName}-${decodedToken.email}`,
     firstName: decodedToken.given_name,
     lastName: decodedToken.family_name
   }
 
   if (decodedToken.realm_access.roles.includes(`${tenantName}-admin`)) {
     response.tenantName = tenantName
+    response.email = `admin-${tenantName}-${decodedToken.email}`
   } else if (decodedToken.realm_access.roles.includes(`${tenantName}-user`)) {
     response.customerName = 'user'
+    esponse.email = `user-${tenantName}-${decodedToken.email}`
   } else {
     return res.status(403).send('Missing Role')
   }
