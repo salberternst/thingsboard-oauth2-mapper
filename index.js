@@ -30,7 +30,7 @@ app.post('/', (req, res) => {
     response.email = `admin-${tenantName}-${decodedToken.email}`
   } else if (decodedToken.realm_access.roles.includes(`${tenantName}-user`)) {
     response.customerName = 'user'
-    esponse.email = `user-${tenantName}-${decodedToken.email}`
+    response.email = `user-${tenantName}-${decodedToken.email}`
   } else {
     return res.status(403).send('Missing Role')
   }
