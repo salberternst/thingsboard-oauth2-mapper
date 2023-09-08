@@ -21,7 +21,7 @@ app.post('/', (req, res) => {
 
   const decodedToken = jwt.decode(token)
   const response = {
-    email: decodedToken.email,
+    email: `${tenantName}-${decodedToken.email}`,
     firstName: decodedToken.given_name,
     lastName: decodedToken.family_name
   }
