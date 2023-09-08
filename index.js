@@ -7,7 +7,11 @@ const app = express()
 
 app.use(express.json())
 
-app.post('/', (req, res, next) => {
+app.get('/', (req, res) => {
+  return res.status(200).send('OK')
+})
+
+app.post('/', (req, res) => {
   const token = req.headers['provider-access-token']
   const tenantName = req.headers['x-tenant-name']
 
