@@ -2,6 +2,16 @@
 
 const express = require('express')
 const jwt = require('jsonwebtoken')
+const crypto = require('crypto')
+
+// create a unique hash for an email + role
+function createEmail (email, tenantName, role) {
+  const hash = crypto
+    .createHash('shake256', { outputLength: 8 })
+    .update(`${role}-${tenantName}-${email}`)
+    .digest('hex')
+  return `${hash}@thingsboard.local`
+}
 
 const app = express()
 
@@ -22,15 +32,16 @@ app.post('/', (req, res) => {
   const decodedToken = jwt.decode(token)
   const response = {
     firstName: decodedToken.given_name,
-    lastName: decodedToken.family_name
+    lastName: decodedToken.family_name,
+    email: decodedToken.email
   }
 
   if (decodedToken.realm_access.roles.includes(`${tenantName}-admin`)) {
     response.tenantName = tenantName
-    response.email = `admin-${tenantName}-${decodedToken.email}`
+    response.email = createEmail(decodedToken.email, tenantName, 'admin')
   } else if (decodedToken.realm_access.roles.includes(`${tenantName}-user`)) {
     response.customerName = 'user'
-    response.email = `user-${tenantName}-${decodedToken.email}`
+    response.email = createEmail(decodedToken.email, tenantName, 'user')
   } else {
     return res.status(403).send('Missing Role')
   }
