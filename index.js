@@ -39,7 +39,10 @@ app.post('/', (req, res) => {
   if (decodedToken.realm_access.roles.includes('admin')) {
     response.tenantName = tenantName
     response.email = createEmail(decodedToken.email, tenantName, 'admin')
-  } else if (decodedToken.realm_access.roles.includes('customer')) {
+  } else if (
+    decodedToken.realm_access.roles.includes('customer') &&
+    decodedToken.customer_id !== undefined
+  ) {
     response.customerName = decodedToken.customer_id
     response.email = createEmail(
       decodedToken.email,
