@@ -39,9 +39,13 @@ app.post('/', (req, res) => {
   if (decodedToken.realm_access.roles.includes('admin')) {
     response.tenantName = tenantName
     response.email = createEmail(decodedToken.email, tenantName, 'admin')
-  } else if (decodedToken.realm_access.roles.includes('user')) {
-    response.customerName = 'user'
-    response.email = createEmail(decodedToken.email, tenantName, 'user')
+  } else if (decodedToken.realm_access.roles.includes('customer')) {
+    response.customerId = decodedToken.customer_id
+    response.email = createEmail(
+      decodedToken.email,
+      tenantName,
+      decodedToken.customer_id
+    )
   } else {
     return res.status(403).send('Missing Role')
   }
