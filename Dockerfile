@@ -8,6 +8,8 @@ COPY docker/run.sh /app
 RUN chmod +x /app/run.sh
 
 COPY package.json /app
+COPY package-lock.json /app
+
 RUN npm install --production
 RUN npm install cross-env
 
