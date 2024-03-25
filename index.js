@@ -13,9 +13,7 @@ app.get('/', (req, res) => {
 
 app.post('/', (req, res) => {
   const token = req.headers['provider-access-token']
-  const tenantName = req.headers['x-tenant-name']
-
-  if (token === undefined || tenantName === undefined) {
+  if (token === undefined) {
     return res.status(400).send('Bad Request')
   }
 
@@ -24,6 +22,11 @@ app.post('/', (req, res) => {
     firstName: decodedToken.given_name,
     lastName: decodedToken.family_name,
     email: decodedToken.email
+  }
+
+  const tenantName = decodedToken.tenant_id
+  if (tenantName === undefined) {
+    return res.status(400).send('Bad Request')
   }
 
   if (decodedToken.realm_access.roles.includes('admin')) {
