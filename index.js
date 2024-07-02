@@ -36,7 +36,10 @@ app.post('/', (req, res) => {
     decodedToken.realm_access.roles.includes('customer') &&
     decodedToken.customer_id !== undefined
   ) {
-    response.customerName = decodedToken.customer_id
+    response.customerId = {
+      id: decodedToken.customer_id,
+      entityType: 'CUSTOMER'
+    }
     response.email = decodedToken.email
   } else {
     return res.status(403).send('Missing Role')
