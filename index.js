@@ -24,14 +24,21 @@ app.post('/', (req, res) => {
     email: decodedToken.email
   }
 
-  const tenantName = decodedToken.tenant_id
-  if (tenantName === undefined) {
+  const tenantId = decodedToken.thingsboard_tenant_id
+  if (tenantId === undefined) {
     return res.status(400).send('Bad Request')
   }
 
-  if (decodedToken.realm_access.roles.includes('admin')) {
-    response.tenantName = tenantName
-    response.email = decodedToken.email
+  response.tenantId = {
+    id: tenantId,
+    entityType: 'TENANT'
+  }
+
+  if (
+    decodedToken.realm_access.roles.includes('admin') ||
+    decodedToken.realm_access.roles.includes('sysadmin')
+  ) {
+    res.status(200).json(response)
   } else if (
     decodedToken.realm_access.roles.includes('customer') &&
     decodedToken.customer_id !== undefined
@@ -40,7 +47,6 @@ app.post('/', (req, res) => {
       id: decodedToken.customer_id,
       entityType: 'CUSTOMER'
     }
-    response.email = decodedToken.email
   } else {
     return res.status(403).send('Missing Role')
   }
