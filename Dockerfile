@@ -1,7 +1,7 @@
 FROM node:20.11.0-alpine3.18
 
 RUN apk --no-cache add curl
-
+RUN adduser  -D user -u 2018
 WORKDIR /app
 
 COPY docker/run.sh /app
